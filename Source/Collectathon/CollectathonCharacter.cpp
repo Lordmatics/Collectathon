@@ -8,6 +8,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Collectathon/CustomComponents/Inventory/InventoryComponent.h"
+#include "Collectathon/CustomComponents/Overlaps/OverlapComponent.h"
+#include "Collectathon/Pickups/BasePickup.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ACollectathonCharacter
@@ -43,8 +46,20 @@ ACollectathonCharacter::ACollectathonCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("MyInventory"));
+	Triggers = CreateDefaultSubobject<UOverlapComponent>(TEXT("MyTriggers"));
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(Triggers, &UOverlapComponent::OnTriggerEnter);
+	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(Triggers, &UOverlapComponent::OnTriggerExit);
+	Triggers->OnOverlapEnter.AddDynamic(this, &ACollectathonCharacter::Test);
+	//Triggers->OnOverlapExit.AddDynamic(this, &ACollectathonCharacter::Test);
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+}
+
+void ACollectathonCharacter::BeginPlay()
+{
+	Super::BeginPlay();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -118,4 +133,19 @@ void ACollectathonCharacter::Jump()
 void ACollectathonCharacter::StopJumping()
 {
 	Super::StopJumping();
+}
+
+void ACollectathonCharacter::Test(AActor* OtherActor)
+{
+	if (OtherActor != nullptr)
+	{
+		ABasePickup* Pickup = Cast<ABasePickup>(OtherActor);
+		if (Pickup && Inventory)
+		{
+			Inventory->AddToInventory(Pickup);
+			bool bKill = false;
+			Pickup->OnCollected(bKill);
+		}
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Test Success"));
 }

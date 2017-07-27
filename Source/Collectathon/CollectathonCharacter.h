@@ -11,6 +11,7 @@ class ACollectathonCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+private:
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
@@ -18,6 +19,12 @@ class ACollectathonCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Inventory")
+		class UInventoryComponent* Inventory;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Triggers")
+		class UOverlapComponent* Triggers;
 public:
 	ACollectathonCharacter();
 
@@ -41,11 +48,16 @@ protected:
 
 protected:
 
+	virtual void BeginPlay() override;
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void Jump() override;
 
 	virtual void StopJumping() override;
+
+	UFUNCTION()
+		void Test(AActor* OtherActor);
 
 public:
 	/** Returns CameraBoom subobject **/
