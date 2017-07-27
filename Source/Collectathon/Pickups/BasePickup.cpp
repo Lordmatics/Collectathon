@@ -20,8 +20,10 @@ ABasePickup::ABasePickup()
 
 	Destroyable = CreateDefaultSubobject<UDestroyableComponent>(TEXT("DestroyableComponent"));
 
-	OnPickedUp.AddDynamic(Destroyable, &UDestroyableComponent::HideSM);
-	OnDestroyed.AddDynamic(Destroyable, &UDestroyableComponent::Kill);
+	//OnPickedUp.AddDynamic(Destroyable, &UDestroyableComponent::HideSM);
+	//OnDestroyed.AddDynamic(Destroyable, &UDestroyableComponent::Kill);
+
+	Value = 0.0f;
 
 }
 void ABasePickup::PostInitializeComponents()
@@ -60,4 +62,9 @@ void ABasePickup::OnCollected(bool bKill)
 		}
 	}
 
+}
+
+float ABasePickup::GetValue() const
+{
+	return Value;
 }

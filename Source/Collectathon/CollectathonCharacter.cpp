@@ -142,10 +142,21 @@ void ACollectathonCharacter::Test(AActor* OtherActor)
 		ABasePickup* Pickup = Cast<ABasePickup>(OtherActor);
 		if (Pickup && Inventory)
 		{
+			bool bKill = true;
+
 			Inventory->AddToInventory(Pickup);
-			bool bKill = false;
+			Inventory->AddCurrency(Pickup->GetValue());
 			Pickup->OnCollected(bKill);
 		}
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Test Success"));
+}
+
+float ACollectathonCharacter::GetGemCurrency() const
+{
+	if (Inventory)
+	{
+		return Inventory->GetCurrency();
+	}
+	return 0.0f;
 }

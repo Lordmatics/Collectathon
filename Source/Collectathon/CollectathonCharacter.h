@@ -59,6 +59,9 @@ protected:
 	UFUNCTION()
 		void Test(AActor* OtherActor);
 
+private:
+	UFUNCTION(BlueprintCallable, Category = "C++")
+		float GetGemCurrency() const;
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }

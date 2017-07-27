@@ -23,6 +23,8 @@ public:
 
 	virtual void OnCollected(bool bKill);
 
+	float GetValue() const;
+
 protected:
 	virtual void PostInitializeComponents() override;
 
@@ -32,7 +34,11 @@ protected:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(VisibleDefaultsOnly, Category = "Pickup")
+		class UDestroyableComponent* Destroyable;
 
+	UPROPERTY(VisibleAnywhere, Category = "Pickup")
+		float Value;
 private:
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Pickup")
@@ -41,8 +47,7 @@ private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Pickup")
 		UStaticMeshComponent* PickupMesh;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Pickup")
-		class UDestroyableComponent* Destroyable;
+
 
 
 	

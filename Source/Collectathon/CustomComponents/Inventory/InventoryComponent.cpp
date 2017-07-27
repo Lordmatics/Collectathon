@@ -8,8 +8,9 @@ UInventoryComponent::UInventoryComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
+	Currency = 0.0f;
 	// ...
 }
 
@@ -44,4 +45,22 @@ void UInventoryComponent::RemoveFromInventory(class ABasePickup* Pickup)
 {
 	if (!Pickup) { UE_LOG(LogTemp, Warning, TEXT("Pickup: was nullptr")); return; }
 	Inventory.Remove(Pickup);
+}
+
+void UInventoryComponent::AddCurrency(float Value)
+{
+	if (Value <= 0.0f) return;
+	Currency += Value;
+}
+
+bool UInventoryComponent::SpendCurrency(float Value)
+{
+	bool Rv = true;
+	Currency >= Value ? Currency -= Value : Rv = false;
+	return Rv;
+}
+
+float UInventoryComponent::GetCurrency() const
+{
+	return Currency;
 }

@@ -20,6 +20,10 @@ public:
 
 	UFUNCTION()
 		void RemoveFromInventory(class ABasePickup* Pickup);
+
+	void AddCurrency(float Value);
+	bool SpendCurrency(float Value);
+	float GetCurrency() const;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -29,5 +33,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Inventory")
 		TArray<class ABasePickup*> Inventory;
+
+	UPROPERTY(EditAnywhere, Category = "Inventory")
+		float Currency;
 	
 };

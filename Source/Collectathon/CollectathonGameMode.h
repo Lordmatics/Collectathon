@@ -13,6 +13,16 @@ class ACollectathonGameMode : public AGameModeBase
 
 public:
 	ACollectathonGameMode();
+
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, Category = "Gem Class")
+		TSubclassOf<class ABasePickup> PickupClass;
+
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+		float Radius;
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+		FVector Centre;
 };
 
 

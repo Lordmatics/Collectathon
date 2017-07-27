@@ -3,6 +3,8 @@
 #include "CollectathonGameMode.h"
 #include "CollectathonCharacter.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Collectathon/Utility/StaticLibrary.h"
+#include "Collectathon/Pickups/BasePickup.h"
 
 ACollectathonGameMode::ACollectathonGameMode()
 {
@@ -12,4 +14,20 @@ ACollectathonGameMode::ACollectathonGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+}
+
+void ACollectathonGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Working spawn code, for gem circles
+	UWorld* const World = GetWorld();
+	if (!World || !PickupClass) return;
+	float Angle = 360.0f / 5;
+	for (size_t i = 0; i < 5; i++)
+	{
+		FVector SpawnPos; UStaticLibrary::PointOnCircle(Radius, Angle * i, Centre, SpawnPos);
+		World->SpawnActor<ABasePickup>(PickupClass, SpawnPos, FRotator::ZeroRotator);
+	}
+
 }
